@@ -1,19 +1,17 @@
 async function sendFormData() {
   const formDataRaw = localStorage.getItem("formData");
-  const selectedTarif = localStorage.getItem("selectedTarif"); // ⭐ tarifni olish
-
   if (!formDataRaw) {
     return;
   }
 
   const formDataObj = JSON.parse(formDataRaw);
 
+
   // Prepare FormData for API
   const formData = new FormData();
   formData.append("sheetName", "Lead");
   formData.append("Ism", formDataObj.Ism);
   formData.append("Telefon raqam", formDataObj.TelefonRaqam);
-  formData.append("Tarif", selectedTarif); // ⭐ tarifni yuborish
   formData.append("Royhatdan o'tgan vaqti", formDataObj.SanaSoat);
 
   try {
@@ -24,14 +22,13 @@ async function sendFormData() {
         body: formData,
       }
     );
-
+    
+    
     if (response.ok) {
       localStorage.removeItem("formData");
-      localStorage.removeItem("selectedTarif"); // ⭐ tarifni ham tozalaymiz
     } else {
       throw new Error("API response was not ok");
     }
-
   } catch (error) {
     console.error("Error submitting form:", error);
     document.getElementById("errorMessage").style.display = "block";
